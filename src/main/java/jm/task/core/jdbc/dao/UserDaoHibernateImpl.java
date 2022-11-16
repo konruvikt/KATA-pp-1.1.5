@@ -14,7 +14,6 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-
     @Override
     public void createUsersTable() {
         try (Session session = Util.getSessionFactory().openSession()) {
@@ -24,7 +23,7 @@ public class UserDaoHibernateImpl implements UserDao {
                     "name VARCHAR(100) NOT NULL, " +
                     "lastName VARCHAR(100) NOT NULL, " +
                     "age SMALLINT NOT NULL)";
-            Query query = session.createSQLQuery(sql)/*.addEntity(User.class)*/;
+            Query query = session.createSQLQuery(sql);
             query.executeUpdate();
             transaction.commit();
         } catch (Exception e) {
@@ -37,8 +36,9 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             String sql = "DROP TABLE IF EXISTS Users";
-            Query query = session.createSQLQuery(sql)/*.addEntity(User.class)*/;
+            Query query = session.createSQLQuery(sql);
             query.executeUpdate();
+            cleanUsersTable();
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,9 +78,8 @@ public class UserDaoHibernateImpl implements UserDao {
             String sql = "FROM User";
             Query query = session.createQuery(sql);
             allUsers = query.list();
-            System.out.println(allUsers.size()); //!!!
             transaction.commit();
-//            allUsers.forEach(System.out::println);
+            allUsers.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
         }
